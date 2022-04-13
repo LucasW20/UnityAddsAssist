@@ -2,20 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-
+using UnityEngine.UI;
 /**
  * Handles the drag and drop mechanics
  * @author Lucas_C_Wright
  * @start 04-02-2022
- * @version 04-03-2022
+ * @version 04-09-2022
  */
 public class CharacterDragDrop : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHandler, IBeginDragHandler {
     [SerializeField]
     private Canvas canvas;
     [SerializeField]
-    private float ySize = 200;
+    private GameObject background;
     [SerializeField]
-    private float yMiniSize = 50;
+    private GameObject mini;
+    //[SerializeField]
+    //private float ySize = 200;
+    //[SerializeField]
+    //private float yMiniSize = 50;
     private RectTransform rectTrans;
     private bool locked = false;
     private bool expanded = true;
@@ -31,22 +35,55 @@ public class CharacterDragDrop : MonoBehaviour, IPointerDownHandler, IDragHandle
     // Start is called before the first frame update
     void Start() {
         rectTrans = GetComponent<RectTransform>();
-        XMin = canvas.GetComponent<RectTransform>().rect.xMin + canvas.GetComponent<RectTransform>().offsetMin.x + xSize;
-        XMax = canvas.GetComponent<RectTransform>().rect.xMax + canvas.GetComponent<RectTransform>().offsetMax.x - xSize;
-        expaYMin = canvas.GetComponent<RectTransform>().rect.yMin + canvas.GetComponent<RectTransform>().offsetMin.y + ySize;
-        expaYMax = canvas.GetComponent<RectTransform>().rect.yMax + canvas.GetComponent<RectTransform>().offsetMax.y - ySize;
-        miniYMin = canvas.GetComponent<RectTransform>().rect.yMin + canvas.GetComponent<RectTransform>().offsetMin.y - yMiniSize;
-        miniYMax = canvas.GetComponent<RectTransform>().rect.yMax + canvas.GetComponent<RectTransform>().offsetMax.y + yMiniSize;
+        //XMin = 0;
+        //XMax = Screen.width;
+
+        //expaYMin = ;
+        //expaYMax = ;
+
+        //miniYMin = ;
+        //miniYMax = ;
     }
 
     // Update is called once per frame
     void Update() {
-        //every frame check that the player is within the screen bounds 
-        if (expanded) {
-            transform.position = new Vector3(Mathf.Clamp(transform.position.x, XMin, XMax), Mathf.Clamp(transform.position.y, expaYMin, expaYMax), 0);
-        } else {
-            transform.position = new Vector3(Mathf.Clamp(transform.position.x, XMin, XMax), Mathf.Clamp(transform.position.y, miniYMin, miniYMax), 0);
+        Vector2 anchoredPosition = transform.GetComponent<RectTransform>().anchoredPosition;
+        //lock right x
+        if (anchoredPosition.x + (transform.GetComponent<RectTransform>().rect.width / 2) > background.GetComponent<RectTransform>().rect.width) {
+            Debug.Log("Hit Right");
+            anchoredPosition.x = background.GetComponent<RectTransform>().rect.width - (transform.GetComponent<RectTransform>().rect.width / 2);
         }
+        //lock left x
+        if (anchoredPosition.x - transform.GetComponent<RectTransform>().rect.width / 2 < 0) {
+            Debug.Log("Hit Left: ");
+            anchoredPosition.x = transform.GetComponent<RectTransform>().rect.width / 2;
+        }
+
+        if (expanded) {
+            //lock bottom y
+            if (anchoredPosition.y - transform.GetComponent<RectTransform>().rect.height / 2 < 0) {
+                Debug.Log("Hit Bottom");
+                anchoredPosition.y = transform.GetComponent<RectTransform>().rect.height / 2;
+            }
+            //lock top y
+            if (anchoredPosition.y + transform.GetComponent<RectTransform>().rect.height / 2 > background.GetComponent<RectTransform>().rect.height) {
+                Debug.Log("Hit Top");
+                anchoredPosition.y = background.GetComponent<RectTransform>().rect.height - transform.GetComponent<RectTransform>().rect.height / 2;
+            }
+        } else {
+            //lock bottom y
+            if (anchoredPosition.y + transform.GetComponent<RectTransform>().rect.height / 2 - mini.GetComponent<RectTransform>().rect.height * 1.25f < 0) {
+                Debug.Log("Hit Bottom");
+                anchoredPosition.y = -transform.GetComponent<RectTransform>().rect.height / 2 + mini.GetComponent<RectTransform>().rect.height * 1.25f;
+            }
+            //lock top y
+            if (anchoredPosition.y + transform.GetComponent<RectTransform>().rect.height / 2 > background.GetComponent<RectTransform>().rect.height) {
+                Debug.Log("Hit Top");
+                anchoredPosition.y = background.GetComponent<RectTransform>().rect.height - transform.GetComponent<RectTransform>().rect.height / 2;
+            }
+        }
+        
+        transform.GetComponent<RectTransform>().anchoredPosition = anchoredPosition;
     }
 
 
@@ -71,19 +108,20 @@ public class CharacterDragDrop : MonoBehaviour, IPointerDownHandler, IDragHandle
     //changes the values for the clamp when the character gets minimized or expanded
     public void changeClamp() {
         expanded = !expanded;
+
     }
 
     //other functions for Drag/Drop. Not currently used.
     public void OnEndDrag(PointerEventData eventData) {
-        Debug.Log("OnEndDrag");
+        //Debug.Log("OnEndDrag");
     }
 
     public void OnPointerDown(PointerEventData eventData) {
         gameObject.transform.SetAsLastSibling();
-        Debug.Log("OnPointerDown");
+        //Debug.Log("OnPointerDown");
     }
 
     public void OnBeginDrag(PointerEventData eventData) {
-        Debug.Log("OnBeginDrag");
+        //Debug.Log("OnBeginDrag");
     }
 }

@@ -8,7 +8,7 @@ using TMPro;
  * Handles the create character system
  * @author Lucas_C_Wright
  * @start 04-02-2022
- * @version 04-03-2022
+ * @version 04-09-2022
  */
 public class CreateSystem : MonoBehaviour {
     [SerializeField]
@@ -58,6 +58,7 @@ public class CreateSystem : MonoBehaviour {
             successArmor = int.Parse(armor);
             successInt = int.Parse(initiative);
         } catch (System.FormatException e) {
+            Debug.LogException(e);
             return false;
         }
 

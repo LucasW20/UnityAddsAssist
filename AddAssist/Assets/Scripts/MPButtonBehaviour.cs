@@ -9,7 +9,7 @@ using System;
  * Functions that run when a button is pressed on the main panel. 
  * @author Lucas_C_Wright
  * @start 04-01-2022
- * @version 04-03-2022
+ * @version 04-09-2022
  */
 public class MPButtonBehaviour : MonoBehaviour {
     [SerializeField]
@@ -99,8 +99,14 @@ public class MPButtonBehaviour : MonoBehaviour {
     }
 
     public void loadLoadExit() {
-        try { 
+        try {
+            //clear the encounter of any existing characters so we don't go over the maximum
+            EncounterStructure.clearEncounter();
+
             string[] lines = loadPanel.transform.GetChild(0).GetComponent<TMP_InputField>().text.Split('\n');
+
+            if (lines.Length > 20) { throw new Exception("Too many characters!"); }
+
             for (int i = 0; i < lines.Length; i++) {
                 if (!lines[i].Equals("")) {
                     string[] ch = lines[i].Split(',');
@@ -114,6 +120,7 @@ public class MPButtonBehaviour : MonoBehaviour {
             EncounterStructure.activateEncounter();
             saved = false;
         } catch (Exception e) {
+            Debug.LogException(e);
             StopAllCoroutines();
             StartCoroutine(FadeOutNotification("One of the lines is Invalid!"));
             EncounterStructure.clearEncounter();
@@ -165,6 +172,7 @@ public class MPButtonBehaviour : MonoBehaviour {
             successCurr = int.Parse(cHp);
             successTemp = int.Parse(cTemp);
         } catch (System.FormatException e) {
+            Debug.LogException(e);
             return false;
         }
 

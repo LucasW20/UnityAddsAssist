@@ -8,7 +8,7 @@ using TMPro;
  * Functions that run when an interactable is used on a character tab
  * @author Lucas_C_Wright
  * @start 04-01-2022
- * @version 04-03-2022
+ * @version 04-09-2022
  */
 public class CharaterInteract : MonoBehaviour {
     //fields to reference values shown to the user
@@ -148,6 +148,8 @@ public class CharaterInteract : MonoBehaviour {
         miniChar.SetActive(true);
         miniChar.GetComponentInChildren<TextMeshProUGUI>().text = nameText.text;
         maxChar.SetActive(false);
+
+        //Debug.Log(miniChar.transform.GetComponent<RectTransform>().rect.width + " " + miniChar.transform.GetComponent<RectTransform>().rect.height);
     }
 
     public void expandChar() {
@@ -155,6 +157,8 @@ public class CharaterInteract : MonoBehaviour {
 
         miniChar.SetActive(false);
         maxChar.SetActive(true);
+
+        //Debug.Log(maxChar.transform.GetComponent<RectTransform>().rect.width + " " + maxChar.transform.GetComponent<RectTransform>().rect.height);
     }
 
     //fields for the buttons. used only when changing the functionality

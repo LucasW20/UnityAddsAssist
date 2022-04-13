@@ -8,7 +8,7 @@ using UnityEngine;
  * Handles the data structures and logic on the different character objects in the scene. Singleton
  * @author Lucas_C_Wright
  * @start 04-02-2022
- * @version 04-07-2022
+ * @version 04-09-2022
  */
 public static class EncounterStructure {
 
@@ -45,6 +45,7 @@ public static class EncounterStructure {
         try {
             charList.Add(new Character(nObject, nHealth, nArmor, nIni, nName));
         } catch (Exception e) { //if any exception is thrown for any reason return false as it is a bad add.
+            Debug.LogException(e);
             return false;
         }
 
@@ -101,5 +102,28 @@ public static class EncounterStructure {
             charList[i].ob.GetComponent<CharaterInteract>().setCharacterFunctionality(functionality);
             charList[i].ob.GetComponent<CharacterDragDrop>().setLock(!functionality);
         }
+    }
+
+    public static string getInitiativeOrder() {
+        List<Character> tempList = charList;
+        string order = "";
+        while (tempList.Count > 0) {
+            int currMaxIndex;
+            currMaxIndex = 0;
+            for (int i = 0; i <= tempList.Count; i++) {
+                if (tempList[i].initiative > tempList[currMaxIndex].initiative) {
+                    currMaxIndex = i;
+                }
+            }
+
+            order += tempList[currMaxIndex].chName + "\n";
+            tempList.RemoveAt(currMaxIndex);
+        }
+        
+        return order;
+    }
+
+    public static int charListCount() {
+        return charList.Count;
     }
 }
