@@ -9,7 +9,7 @@ using System;
  * Functions that run when a button is pressed on the main panel. 
  * @author Lucas_C_Wright
  * @start 04-01-2022
- * @version 04-09-2022
+ * @version 04-15-2022
  */
 public class MPButtonBehaviour : MonoBehaviour {
     [SerializeField]
@@ -28,6 +28,8 @@ public class MPButtonBehaviour : MonoBehaviour {
     private Canvas canvas;
     [SerializeField]
     private GameObject characterTemplate;
+    [SerializeField]
+    private GameObject mpBlurImage;
     private bool saved = true;
     private float fadeTime = 3.5f;
 
@@ -236,20 +238,21 @@ public class MPButtonBehaviour : MonoBehaviour {
         }
     }
 
-    [SerializeField]
-    private Button btCreate;
-    [SerializeField]
-    private Button btSave;
-    [SerializeField]
-    private Button btLoad;
-    [SerializeField]
-    private Button btClear;
+    //[SerializeField]
+    //private Button btCreate;
+    //[SerializeField]
+    //private Button btSave;
+    //[SerializeField]
+    //private Button btLoad;
+    //[SerializeField]
+    //private Button btClear;
 
     public void setFuncationality(bool functionality) {
-        btCreate.enabled = functionality;
-        btSave.enabled = functionality;
-        btLoad.enabled = functionality;
-        btClear.enabled = functionality;
+        //btCreate.enabled = functionality;
+        //btSave.enabled = functionality;
+        //btLoad.enabled = functionality;
+        //btClear.enabled = functionality;
+        mpBlurImage.SetActive(!functionality);
         EncounterStructure.setEncounterFunctionality(functionality);
     }
 }

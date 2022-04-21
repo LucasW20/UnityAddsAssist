@@ -8,7 +8,7 @@ using TMPro;
  * Functions that run when an interactable is used on a character tab
  * @author Lucas_C_Wright
  * @start 04-01-2022
- * @version 04-09-2022
+ * @version 04-16-2022
  */
 public class CharaterInteract : MonoBehaviour {
     //fields to reference values shown to the user
@@ -27,11 +27,7 @@ public class CharaterInteract : MonoBehaviour {
     [SerializeField]
     private TextMeshProUGUI initiativeText;
     [SerializeField]
-    private TextMeshProUGUI nameText;
-    [SerializeField]
-    private GameObject miniChar;
-    [SerializeField]
-    private GameObject maxChar;
+    public TextMeshProUGUI nameText;
     [SerializeField]
     private GameObject MPObect;
     private int sliderVal;
@@ -73,7 +69,6 @@ public class CharaterInteract : MonoBehaviour {
     }
 
     //event calles for the different buttons on the character panel
-
     public void plusHealth() {
         if (int.Parse(healthText.text) < maxHeatlh) {
             healthText.text = "" + (int.Parse(healthText.text) + 1);
@@ -132,64 +127,65 @@ public class CharaterInteract : MonoBehaviour {
         mainPanel.changesMade();
     }
 
-    public void exitCharacter() {
-        EncounterStructure.removeChar(gameObject);
-        Destroy(gameObject);
-        mainPanel.changesMade();
-    }
+    //public void exitCharacter() {
+    //    EncounterStructure.removeChar(gameObject);
+    //    Destroy(gameObject);
+    //    mainPanel.changesMade();
+    //}
 
-    public void lockCharacter() {
-        gameObject.GetComponent<CharacterDragDrop>().changeLock();
-    }
+    //public void lockCharacter() {
+    //    gameObject.GetComponent<CharacterDragDrop>().changeLock();
+    //}
 
-    public void minimizeChar() {
-        GetComponent<CharacterDragDrop>().changeClamp();
+    //public void minimizeChar() {
+    //    GetComponent<CharacterDragDrop>().changeClamp();
 
-        miniChar.SetActive(true);
-        miniChar.GetComponentInChildren<TextMeshProUGUI>().text = nameText.text;
-        maxChar.SetActive(false);
+    //    miniChar.SetActive(true);
+    //    miniChar.GetComponentInChildren<TextMeshProUGUI>().text = nameText.text;
+    //    maxChar.SetActive(false);
 
-        //Debug.Log(miniChar.transform.GetComponent<RectTransform>().rect.width + " " + miniChar.transform.GetComponent<RectTransform>().rect.height);
-    }
+    //    //Debug.Log(miniChar.transform.GetComponent<RectTransform>().rect.width + " " + miniChar.transform.GetComponent<RectTransform>().rect.height);
+    //}
 
-    public void expandChar() {
-        GetComponent<CharacterDragDrop>().changeClamp();
+    //public void expandChar() {
+    //    GetComponent<CharacterDragDrop>().changeClamp();
 
-        miniChar.SetActive(false);
-        maxChar.SetActive(true);
+    //    miniChar.SetActive(false);
+    //    maxChar.SetActive(true);
 
-        //Debug.Log(maxChar.transform.GetComponent<RectTransform>().rect.width + " " + maxChar.transform.GetComponent<RectTransform>().rect.height);
-    }
+    //    //Debug.Log(maxChar.transform.GetComponent<RectTransform>().rect.width + " " + maxChar.transform.GetComponent<RectTransform>().rect.height);
+    //}
 
     //fields for the buttons. used only when changing the functionality
-    [SerializeField]
-    private Button plusOne;
-    [SerializeField]
-    private Button plusMulti;
-    [SerializeField]
-    private Button minusOne;
-    [SerializeField]
-    private Button minusMulti;
-    [SerializeField]
-    private Button tempPOne;
-    [SerializeField]
-    private Button tempMOne;
-    [SerializeField]
-    private Button tempPMulti;
-    [SerializeField]
-    private Button tempMMulti;
-    [SerializeField]
-    private Button btReset;
+    //[SerializeField]
+    //private Button plusOne;
+    //[SerializeField]
+    //private Button plusMulti;
+    //[SerializeField]
+    //private Button minusOne;
+    //[SerializeField]
+    //private Button minusMulti;
+    //[SerializeField]
+    //private Button tempPOne;
+    //[SerializeField]
+    //private Button tempMOne;
+    //[SerializeField]
+    //private Button tempPMulti;
+    //[SerializeField]
+    //private Button tempMMulti;
+    //[SerializeField]
+    //private Button btReset;
 
-    public void setCharacterFunctionality(bool functionality) {
-        plusOne.enabled = functionality;
-        minusOne.enabled = functionality;  
-        plusMulti.enabled = functionality;
-        minusMulti.enabled = functionality;
-        tempPOne.enabled = functionality;   
-        tempMOne.enabled = functionality;
-        tempPMulti.enabled = functionality;
-        tempMMulti.enabled = functionality;
-        btReset.enabled = functionality;
+    public void setCharacterFunctionality_DEPRECATED(bool functionality) { 
+        
     }
+    //    plusOne.enabled = functionality;
+    //    minusOne.enabled = functionality;  
+    //    plusMulti.enabled = functionality;
+    //    minusMulti.enabled = functionality;
+    //    tempPOne.enabled = functionality;   
+    //    tempMOne.enabled = functionality;
+    //    tempPMulti.enabled = functionality;
+    //    tempMMulti.enabled = functionality;
+    //    btReset.enabled = functionality;
 }

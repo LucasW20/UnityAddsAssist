@@ -98,9 +98,8 @@ public static class EncounterStructure {
     //changes the functionality of each character in the list/scene. Used for when a window from the main controls are open.
     public static void setEncounterFunctionality(bool functionality) {
         for (int i = 0; i < charList.Count; i++) {
-            //turn off the buttons and lock each character
-            charList[i].ob.GetComponent<CharaterInteract>().setCharacterFunctionality(functionality);
-            charList[i].ob.GetComponent<CharacterDragDrop>().setLock(!functionality);
+            //turn off the buttons
+            charList[i].ob.GetComponent<CharacterUtility>().setCharacterFunctionality(functionality);
         }
     }
 
