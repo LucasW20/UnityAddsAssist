@@ -9,7 +9,7 @@ using System;
  * Functions that run when a button is pressed on the main panel. 
  * @author Lucas_C_Wright
  * @start 04-01-2022
- * @version 04-15-2022
+ * @version 04-24-2022
  */
 public class MPButtonBehaviour : MonoBehaviour {
     [SerializeField]
@@ -18,8 +18,6 @@ public class MPButtonBehaviour : MonoBehaviour {
     private GameObject savePanel;
     [SerializeField]
     private GameObject loadPanel;
-    //[SerializeField]
-    //private GameObject exitConfirmationPanel;
     [SerializeField]
     private GameObject resetConfirmationPanel;
     [SerializeField]
@@ -29,7 +27,13 @@ public class MPButtonBehaviour : MonoBehaviour {
     [SerializeField]
     private GameObject characterTemplate;
     [SerializeField]
+    private GameObject bossCharTemplate;
+    [SerializeField]
     private GameObject mpBlurImage;
+    [SerializeField]
+    private GameObject turnPanel;
+    [SerializeField]
+    private TextMeshProUGUI turnText;
     private bool saved = true;
     private float fadeTime = 3.5f;
 
@@ -47,15 +51,6 @@ public class MPButtonBehaviour : MonoBehaviour {
         createPanel.SetActive(true);
         setFuncationality(false);
     }
-
-    //public void exitButton() {
-    //    if (saved) {
-    //        Application.Quit();
-    //    } else {
-    //        exitConfirmationPanel.SetActive(true);
-    //        exitConfirmationPanel.transform.SetAsLastSibling();
-    //    }
-    //}
 
     public void saveButton() {
         setFuncationality(false);
@@ -84,6 +79,21 @@ public class MPButtonBehaviour : MonoBehaviour {
         }
     }
 
+    public void generateInitiativeOrder() {
+        if (EncounterStructure.charListCount() == 0) { 
+            return; 
+        }
+
+        //get the string of order from the EncounterStucture
+        string order = EncounterStructure.getInitiativeOrder();
+
+        //paste the string to a new initiative order panel
+        turnText.text = order;
+
+        //enable the panel
+        turnPanel.SetActive(true);
+    }
+
     //sub buttons
 
     public void saveClearExit() {
@@ -105,23 +115,28 @@ public class MPButtonBehaviour : MonoBehaviour {
             //clear the encounter of any existing characters so we don't go over the maximum
             EncounterStructure.clearEncounter();
 
+            //load the input into an array split by the lines
             string[] lines = loadPanel.transform.GetChild(0).GetComponent<TMP_InputField>().text.Split('\n');
 
+            //max of 20 characters
             if (lines.Length > 20) { throw new Exception("Too many characters!"); }
 
+            //for each line convert it into an array that is a character
             for (int i = 0; i < lines.Length; i++) {
                 if (!lines[i].Equals("")) {
                     string[] ch = lines[i].Split(',');
-                    this.create(ch[0], ch[1], ch[2], ch[3], ch[4], ch[5]);
+                    this.create(ch[0], ch[1], ch[2], ch[3], ch[4], ch[5], ch[6]);  //create the UI element for the character
                 }
             }
 
+            //after a successfull creation of each character turn everything on
             setFuncationality(true);
             loadPanel.transform.GetChild(0).GetComponent<TMP_InputField>().text = "";
             loadPanel.SetActive(false);
             EncounterStructure.activateEncounter();
             saved = false;
         } catch (Exception e) {
+            //if the creation fails for any reason abort and clear the encounter
             Debug.LogException(e);
             StopAllCoroutines();
             StartCoroutine(FadeOutNotification("One of the lines is Invalid!"));
@@ -152,17 +167,20 @@ public class MPButtonBehaviour : MonoBehaviour {
 
     //general fuctions    
     //variables for testing inputs
+    //TODO find a better way to handle these variables
     string chName;
     string armor;
     string initiative;
     string hp;
     string cHp;
     string cTemp;
+    string cBoss;
     int successArmor;
     int successHealth;
     int successInt;
     int successCurr;
     int successTemp;
+    bool successIsBoss; 
 
     //verifies that the inputs in the fields are valid for the correct values. Return false if any part is bad
     private bool verifyInput() {
@@ -173,6 +191,8 @@ public class MPButtonBehaviour : MonoBehaviour {
             successInt = int.Parse(initiative);
             successCurr = int.Parse(cHp);
             successTemp = int.Parse(cTemp);
+            int tempBoss = int.Parse(cBoss);
+            if (tempBoss == 1) { successIsBoss = true; } else { successIsBoss = false; }
         } catch (System.FormatException e) {
             Debug.LogException(e);
             return false;
@@ -189,7 +209,7 @@ public class MPButtonBehaviour : MonoBehaviour {
         return true;
     }
 
-    public void create(string nameVal, string hpVal, string armorVal, string initiativeVal, string cHpVal, string cTempVal) {
+    public void create(string nameVal, string hpVal, string armorVal, string initiativeVal, string cHpVal, string cTempVal, string sIsCharBoss) {
         //get the values in the field. store them in class variables for multiple access points
         chName = nameVal;
         armor = armorVal;
@@ -197,21 +217,38 @@ public class MPButtonBehaviour : MonoBehaviour {
         hp = hpVal;
         cHp = cHpVal;
         cTemp = cTempVal;
+        cBoss = sIsCharBoss;
 
         //check that the values are good
         if (verifyInput()) {
             //make the new UI element
-            GameObject nChar = Instantiate(characterTemplate);
+            GameObject nChar;
 
-            //set the UI elements position/size/scale and finally call the startChar function for that characters script
-            nChar.transform.parent = canvas.transform;
-            nChar.GetComponent<RectTransform>().sizeDelta = characterTemplate.GetComponent<RectTransform>().sizeDelta;
-            nChar.GetComponent<RectTransform>().localScale = characterTemplate.GetComponent<RectTransform>().localScale;
-            nChar.GetComponent<RectTransform>().position = characterTemplate.GetComponent<RectTransform>().position;
+            if (successIsBoss) {
+                //create boss UI
+                nChar = Instantiate(bossCharTemplate);
+
+                //set the UI elements position/size/scale
+                nChar.transform.parent = canvas.transform;
+                nChar.GetComponent<RectTransform>().sizeDelta = bossCharTemplate.GetComponent<RectTransform>().sizeDelta;
+                nChar.GetComponent<RectTransform>().localScale = bossCharTemplate.GetComponent<RectTransform>().localScale;
+                nChar.GetComponent<RectTransform>().position = bossCharTemplate.GetComponent<RectTransform>().position;
+            } else {
+                //create normal UI
+                nChar = Instantiate(characterTemplate);
+
+                //set the UI elements position/size/scale
+                nChar.transform.parent = canvas.transform;
+                nChar.GetComponent<RectTransform>().sizeDelta = characterTemplate.GetComponent<RectTransform>().sizeDelta;
+                nChar.GetComponent<RectTransform>().localScale = characterTemplate.GetComponent<RectTransform>().localScale;
+                nChar.GetComponent<RectTransform>().position = characterTemplate.GetComponent<RectTransform>().position;
+            }
+
+            //finally call the startChar function for that characters script
             nChar.GetComponent<CharaterInteract>().startChar(chName, successHealth, successArmor, successInt, successCurr, successTemp);
 
             //finally add the UI gameobject to the singleton
-            EncounterStructure.addChar(nChar, successHealth, successArmor, successInt, chName);
+            EncounterStructure.addChar(nChar, successHealth, successArmor, successInt, chName, successIsBoss);
         } else {
             //If there was anything wrong with the inputs then throw out an error message
             throw new Exception("Invalid Input Expection!");
@@ -238,20 +275,7 @@ public class MPButtonBehaviour : MonoBehaviour {
         }
     }
 
-    //[SerializeField]
-    //private Button btCreate;
-    //[SerializeField]
-    //private Button btSave;
-    //[SerializeField]
-    //private Button btLoad;
-    //[SerializeField]
-    //private Button btClear;
-
     public void setFuncationality(bool functionality) {
-        //btCreate.enabled = functionality;
-        //btSave.enabled = functionality;
-        //btLoad.enabled = functionality;
-        //btClear.enabled = functionality;
         mpBlurImage.SetActive(!functionality);
         EncounterStructure.setEncounterFunctionality(functionality);
     }

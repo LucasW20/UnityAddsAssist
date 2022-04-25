@@ -8,7 +8,7 @@ using TMPro;
  * Handles the functionality for the utility buttons on character panels
  * @author Lucas_C_Wright
  * @start 04-15-2022
- * @version 04-15-2022
+ * @version 04-22-2022
  */
 public class CharacterUtility : MonoBehaviour {
     [SerializeField]

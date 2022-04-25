@@ -8,7 +8,7 @@ using TMPro;
  * Functions that run when an interactable is used on a character tab
  * @author Lucas_C_Wright
  * @start 04-01-2022
- * @version 04-16-2022
+ * @version 04-22-2022
  */
 public class CharaterInteract : MonoBehaviour {
     //fields to reference values shown to the user
@@ -47,7 +47,7 @@ public class CharaterInteract : MonoBehaviour {
     public void startChar(string nName, int nMax, int nArmor, int nInt) {
         mainPanel = MPObect.GetComponent<MPButtonBehaviour>();
 
-        healthTitle.text = "HEALTH (Max " + nMax + ")";
+        healthTitle.text = "Health (Max " + nMax + ")";
         maxHeatlh = nMax;
         nameText.text = nName;
         healthText.text = "" + nMax;

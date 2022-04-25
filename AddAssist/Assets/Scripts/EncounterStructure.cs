@@ -3,12 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using System.Linq;
 
 /**
  * Handles the data structures and logic on the different character objects in the scene. Singleton
  * @author Lucas_C_Wright
  * @start 04-02-2022
- * @version 04-09-2022
+ * @version 04-24-2022
  */
 public static class EncounterStructure {
 
@@ -19,21 +20,27 @@ public static class EncounterStructure {
         public int armor;
         public int initiative;
         public string chName;
+        public bool isBoss;
 
         //public constructor but because the struct is private you can't make characters outside of this class
-        public Character(GameObject UIObject, int maxHealth, int armorClass, int encounterInitiative, string characterName) {
+        public Character(GameObject UIObject, int maxHealth, int armorClass, int encounterInitiative, string characterName, bool isCharBoss) {
             ob = UIObject;
             health = maxHealth;
             armor = armorClass;
             initiative = encounterInitiative;
             chName = characterName;
+            isBoss = isCharBoss;
         }
 
         //to string for save/load purposes. prints out all the information about the character including current values to a single line
         public override string ToString() {
-            return "" + chName + "," + health + "," + armor + "," + initiative + "," +
+            string res = "" + chName + "," + health + "," + armor + "," + initiative + "," +
                 ob.transform.GetChild(0).GetChild(9).GetChild(0).GetComponent<TextMeshProUGUI>().text + "," +
-                ob.transform.GetChild(0).GetChild(10).GetChild(0).GetComponent<TextMeshProUGUI>().text;
+                ob.transform.GetChild(0).GetChild(10).GetChild(0).GetComponent<TextMeshProUGUI>().text + ",";
+
+            if (isBoss) { res += "1"; } else { res += "0"; }
+
+            return res;
         }
     }
 
@@ -41,9 +48,9 @@ public static class EncounterStructure {
     private static List<Character> charList = new List<Character>();
 
     //public method to add a character to the list. this is used to verify a good add. Returns true with a successfull add, false otherwise.
-    public static bool addChar(GameObject nObject, int nHealth, int nArmor, int nIni, string nName) {
+    public static bool addChar(GameObject nObject, int nHealth, int nArmor, int nIni, string nName, bool isCharBoss) {
         try {
-            charList.Add(new Character(nObject, nHealth, nArmor, nIni, nName));
+            charList.Add(new Character(nObject, nHealth, nArmor, nIni, nName, isCharBoss));
         } catch (Exception e) { //if any exception is thrown for any reason return false as it is a bad add.
             Debug.LogException(e);
             return false;
@@ -103,20 +110,36 @@ public static class EncounterStructure {
         }
     }
 
+    //gets a string of all the characters in order of initiative
     public static string getInitiativeOrder() {
-        List<Character> tempList = charList;
+        //create a temporary list and fill it with the singleton character list
+        List<Character> tempList = new List<Character>();
+        for (int i = 0; i < charList.Count;i++) {
+            tempList.Add(charList[i]);
+        }
+
+        //sort the list from highest intitiative to lowest
+        tempList.Sort((s2, s1) => s1.initiative.CompareTo(s2.initiative));
         string order = "";
-        while (tempList.Count > 0) {
-            int currMaxIndex;
-            currMaxIndex = 0;
-            for (int i = 0; i <= tempList.Count; i++) {
-                if (tempList[i].initiative > tempList[currMaxIndex].initiative) {
-                    currMaxIndex = i;
+        
+        //check for duplicates at each index
+        for (int i = 0; i < tempList.Count; i++) {
+            bool duplicate = false;
+
+            for (int j = 0; j < tempList.Count; j++) {
+                //if a duplicate is found at a different index then make it so the name is surrounded by *'s
+                if (i != j && tempList[i].initiative == tempList[j].initiative) {
+                    duplicate = true;
                 }
             }
 
-            order += tempList[currMaxIndex].chName + "\n";
-            tempList.RemoveAt(currMaxIndex);
+            //update the string
+            if (duplicate) {
+                order += "*" + tempList[i].chName + "*\n";
+            }
+            else {
+                order += i + 1 + ". " + tempList[i].chName + "\n";
+            }
         }
         
         return order;

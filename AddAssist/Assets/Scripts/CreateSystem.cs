@@ -8,7 +8,7 @@ using TMPro;
  * Handles the create character system
  * @author Lucas_C_Wright
  * @start 04-02-2022
- * @version 04-09-2022
+ * @version 04-23-2022
  */
 public class CreateSystem : MonoBehaviour {
     [SerializeField]
@@ -20,7 +20,11 @@ public class CreateSystem : MonoBehaviour {
     [SerializeField]
     private TMP_InputField iniInput;
     [SerializeField]
+    private GameObject bossToggle;
+    [SerializeField]
     private GameObject characterTemplate;
+    [SerializeField]
+    private GameObject bossCharTemplate;
     [SerializeField]
     private GameObject canvas;
     [SerializeField] 
@@ -82,17 +86,37 @@ public class CreateSystem : MonoBehaviour {
         //check that the values are good
         if (verifyInput(nameInput.text, armorInput.text, iniInput.text, healthInput.text)) {
             //make the new UI element
-            GameObject nChar = Instantiate(characterTemplate);
+            GameObject nChar;
 
-            //set the UI elements position/size/scale and finally call the startChar function for that characters script
-            nChar.transform.parent = canvas.transform;
-            nChar.GetComponent<RectTransform>().sizeDelta = characterTemplate.GetComponent<RectTransform>().sizeDelta;
-            nChar.GetComponent<RectTransform>().localScale = characterTemplate.GetComponent<RectTransform>().localScale;
-            nChar.GetComponent<RectTransform>().position = characterTemplate.GetComponent<RectTransform>().position;
-            nChar.GetComponent<CharaterInteract>().startChar(nameInput.text, successHealth, successArmor, successInt);
+            if (bossToggle.GetComponent<Toggle>().isOn) {
+                //create boss panel
+                nChar = Instantiate(bossCharTemplate);
 
-            //add the UI gameobject to the singleton, show in the screen, and set the functunality to on.
-            EncounterStructure.addChar(nChar, successHealth, successArmor, successInt, nameInput.text);
+                //set the UI elements position/size/scale and finally call the startChar function for that characters script
+                nChar.transform.parent = canvas.transform;
+                nChar.GetComponent<RectTransform>().sizeDelta = bossCharTemplate.GetComponent<RectTransform>().sizeDelta;
+                nChar.GetComponent<RectTransform>().localScale = bossCharTemplate.GetComponent<RectTransform>().localScale;
+                nChar.GetComponent<RectTransform>().position = bossCharTemplate.GetComponent<RectTransform>().position;
+                nChar.GetComponent<CharaterInteract>().startChar(nameInput.text, successHealth, successArmor, successInt);
+
+                //add to singleton as boss character
+                EncounterStructure.addChar(nChar, successHealth, successArmor, successInt, nameInput.text, true);
+            } else {
+                //create normal panel
+                nChar = Instantiate(characterTemplate);
+
+                //set the UI elements position/size/scale and finally call the startChar function for that characters script
+                nChar.transform.parent = canvas.transform;
+                nChar.GetComponent<RectTransform>().sizeDelta = characterTemplate.GetComponent<RectTransform>().sizeDelta;
+                nChar.GetComponent<RectTransform>().localScale = characterTemplate.GetComponent<RectTransform>().localScale;
+                nChar.GetComponent<RectTransform>().position = characterTemplate.GetComponent<RectTransform>().position;
+                nChar.GetComponent<CharaterInteract>().startChar(nameInput.text, successHealth, successArmor, successInt);
+
+                //add to singleton as normal character
+                EncounterStructure.addChar(nChar, successHealth, successArmor, successInt, nameInput.text, false);
+            }
+
+            //Show in the screen, and set the functunality to on.
             nChar.SetActive(true);
             canvas.transform.GetChild(1).GetComponent<MPButtonBehaviour>().setFuncationality(true);
 
