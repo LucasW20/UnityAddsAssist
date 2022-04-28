@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -8,7 +7,7 @@ using TMPro;
  * Handles the create character system
  * @author Lucas_C_Wright
  * @start 04-02-2022
- * @version 04-23-2022
+ * @version 04-28-2022
  */
 public class CreateSystem : MonoBehaviour {
     [SerializeField]
@@ -34,22 +33,17 @@ public class CreateSystem : MonoBehaviour {
     // Start is called before the first frame update
     void Start() {
         //make sure that the input fields are empty
-        nameInput.text = "";
-        armorInput.text = "";
-        healthInput.text = "";
-        iniInput.text = "";
+        resetFields();
     }
 
+    //event call for the cancel button
     public void cancelCreate() {
         gameObject.SetActive(false);
         canvas.transform.GetChild(1).GetComponent<MPButtonBehaviour>().setFuncationality(true);
+        resetFields();
     }
 
     //variables for testing inputs
-    //private string chName;
-    //private string armor;
-    //private string initiative;
-    //private string hp;
     private int successArmor;
     private int successHealth;
     private int successInt;
@@ -78,10 +72,6 @@ public class CreateSystem : MonoBehaviour {
     //called by the Create button. Gets the necessary info from the input fields and then creates the UI element. 
     public void create() {
         //get the values in the field. store them in class variables for multiple access points
-        //chName = nameInput.text;
-        //armor = armorInput.text;
-        //initiative = iniInput.text;
-        //hp = healthInput.text;
 
         //check that the values are good
         if (verifyInput(nameInput.text, armorInput.text, iniInput.text, healthInput.text)) {
@@ -121,10 +111,7 @@ public class CreateSystem : MonoBehaviour {
             canvas.transform.GetChild(1).GetComponent<MPButtonBehaviour>().setFuncationality(true);
 
             //finally reset the fields after a successfull creation and hide the create window
-            nameInput.text = "";
-            armorInput.text = "";
-            healthInput.text = "";
-            iniInput.text = "";
+            resetFields();
             gameObject.SetActive(false);  
         } else {
             //If there was anything wrong with the inputs then throw out an error message
@@ -151,5 +138,12 @@ public class CreateSystem : MonoBehaviour {
                                   Mathf.Lerp(1f, 0f, time / fadeTime));
             yield return null;                  //finish the loop
         }
+    }
+
+    private void resetFields() {
+        nameInput.text = "";
+        armorInput.text = "";
+        healthInput.text = "";
+        iniInput.text = "";
     }
 }

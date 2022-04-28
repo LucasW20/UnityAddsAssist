@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 /**
@@ -14,29 +12,20 @@ public class OrderInteract : MonoBehaviour {
     [SerializeField]
     private GameObject maxPanel;
 
+    //Button call for the minimize button
     public void minimize() {
         maxPanel.SetActive(false);
         miniPanel.SetActive(true);
     }
 
+    //Button call for the maximize button
     public void maximize() {
         maxPanel.SetActive(true);
         miniPanel.SetActive(false);
     }
 
+    //Button call for the close button
     public void closePanel() {
         gameObject.SetActive(false);
     }
-
-    //// Start is called before the first frame update
-    //void Start()
-    //{
-
-    //}
-
-    //// Update is called once per frame
-    //void Update()
-    //{
-
-    //}
 }

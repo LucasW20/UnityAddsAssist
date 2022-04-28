@@ -18,7 +18,6 @@ public class CharacterDragDrop : MonoBehaviour, IPointerDownHandler, IDragHandle
     private GameObject mini;
     private RectTransform rectTrans;
     private bool expanded = true;
-    //private bool locked = false;
 
     // Start is called before the first frame update
     void Start() {
@@ -39,7 +38,7 @@ public class CharacterDragDrop : MonoBehaviour, IPointerDownHandler, IDragHandle
             anchoredPosition.x = transform.GetComponent<RectTransform>().rect.width / 2;
         }
 
-        if (expanded) {
+        if (expanded) { //clamps for the maximized panel
             //lock bottom y
             if (anchoredPosition.y - transform.GetComponent<RectTransform>().rect.height / 2 < 0) {
                 Debug.Log("Hit Bottom");
@@ -50,7 +49,7 @@ public class CharacterDragDrop : MonoBehaviour, IPointerDownHandler, IDragHandle
                 Debug.Log("Hit Top");
                 anchoredPosition.y = background.GetComponent<RectTransform>().rect.height - transform.GetComponent<RectTransform>().rect.height / 2;
             }
-        } else {
+        } else { //clamps for the minimized panel
             //lock bottom y
             if (anchoredPosition.y + transform.GetComponent<RectTransform>().rect.height / 2 - mini.GetComponent<RectTransform>().rect.height * 1.25f < 0) {
                 Debug.Log("Hit Bottom");
@@ -73,32 +72,18 @@ public class CharacterDragDrop : MonoBehaviour, IPointerDownHandler, IDragHandle
         rectTrans.anchoredPosition += eventData.delta / canvas.scaleFactor;
     }
 
-    ////swaps the locked boolean. When false the player can move around this character panel. When true they can't
-    //public void changeLock() {
-    //    locked = !locked;
-    //}
-
-    //public void setLock(bool lk) {
-    //    locked = lk;
-    //}
-
     //changes the values for the clamp when the character gets minimized or expanded
     public void changeClamp() {
         expanded = !expanded;
 
     }
 
-    //other functions for Drag/Drop. Not currently used.
-    public void OnEndDrag(PointerEventData eventData) {
-        //Debug.Log("OnEndDrag");
-    }
-
+    //event call when the played clicks on the panel
     public void OnPointerDown(PointerEventData eventData) {
         gameObject.transform.SetAsLastSibling();
-        //Debug.Log("OnPointerDown");
     }
 
-    public void OnBeginDrag(PointerEventData eventData) {
-        //Debug.Log("OnBeginDrag");
-    }
+    //other functions for Drag/Drop. Not currently used.
+    public void OnEndDrag(PointerEventData eventData) { }
+    public void OnBeginDrag(PointerEventData eventData) { }
 }

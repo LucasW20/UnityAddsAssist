@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 /**
@@ -47,8 +44,8 @@ public class CharacterUtility : MonoBehaviour {
 
     //event call for the minimize button. Minimizes the character panel for better organization
     public void minimizeChar() {
+        //update specifics for the minimized panel. Clamp area and team.
         GetComponent<CharacterDragDrop>().changeClamp();
-
         miniChar.transform.GetChild(2).Find(currentTeam.name).gameObject.SetActive(true);
 
         miniChar.SetActive(true);
@@ -58,8 +55,10 @@ public class CharacterUtility : MonoBehaviour {
 
     //event call for the maximize button. Maximizes the character panel for better organization
     public void expandChar() {
+        //update specifics
         GetComponent<CharacterDragDrop>().changeClamp();
 
+        //turn off the team in the mini panel when expanding to ready for a team change
         miniChar.transform.GetChild(2).Find(currentTeam.name).gameObject.SetActive(false);
 
         miniChar.SetActive(false);
@@ -79,13 +78,13 @@ public class CharacterUtility : MonoBehaviour {
     public void openTeamMenu() {
         setCharacterFunctionality(false);
         teamMenu.SetActive(true);
-        //GetComponent<CharacterDragDrop>().changeLock();
     }
 
     //event calls for all the buttons in the team window. Changes the team that the character is on.
     public void selectTeam(string newTeam) {
         currentTeam.SetActive(false);
 
+        //swap the team
         switch (newTeam) {
             case "Sword":
                 currentTeam = teamSword;
@@ -105,18 +104,6 @@ public class CharacterUtility : MonoBehaviour {
 
         currentTeam.SetActive(true);
         setCharacterFunctionality(true);
-        //GetComponent<CharacterDragDrop>().changeLock();
         teamMenu.SetActive(false);
     }
-
-    ////event call for the lock button. Locks the character panel in place so you can't drag/drop
-    //public void lockCharacter() {
-    //    gameObject.GetComponent<CharacterDragDrop>().changeLock();
-    //}
-
-    //// Update is called once per frame
-    //void Update()
-    //{
-
-    //}
 }

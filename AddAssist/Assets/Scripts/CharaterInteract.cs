@@ -42,7 +42,7 @@ public class CharaterInteract : MonoBehaviour {
         sliderVal = 1;
         tempText.text = startTemp;
     }
-    
+
     //called when a new character is instanciated by other classes. This is often called the same time as this.Start()
     public void startChar(string nName, int nMax, int nArmor, int nInt) {
         mainPanel = MPObect.GetComponent<MPButtonBehaviour>();
@@ -57,18 +57,21 @@ public class CharaterInteract : MonoBehaviour {
         mainPanel.changesMade();
     }
 
+    //called when a new character is instanciated by other classes. Specifically used for when loading existing encounters
     public void startChar(string nName, int nMax, int nArmor, int nInt, int cHealth, int cTemp) {
         startChar(nName, nMax, nArmor, nInt);
         healthText.text = "" + cHealth;
         startTemp = "" + cTemp;
     }
 
+    //event call for when the value of the slider is changed
     public void multiSliderChange() {
+        //update the value that the health is affected by
         sliderText.text = "" + multiSlider.value;
         sliderVal = (int)multiSlider.value;
     }
 
-    //event calles for the different buttons on the character panel
+    //event call for the plus 1 button
     public void plusHealth() {
         if (int.Parse(healthText.text) < maxHeatlh) {
             healthText.text = "" + (int.Parse(healthText.text) + 1);
@@ -76,13 +79,15 @@ public class CharaterInteract : MonoBehaviour {
         }
     }
 
+    //event call for the minus 1 button
     public void minusHealth() {
-        if (int.Parse (healthText.text) > 0) {
+        if (int.Parse(healthText.text) > 0) {
             healthText.text = "" + (int.Parse(healthText.text) - 1);
             mainPanel.changesMade();
         }
     }
 
+    //event call for the plus multi button
     public void multiPlus() {
         if (int.Parse(healthText.text) <= maxHeatlh - sliderVal) {
             healthText.text = "" + (int.Parse(healthText.text) + sliderVal);
@@ -90,6 +95,7 @@ public class CharaterInteract : MonoBehaviour {
         }
     }
 
+    //event call for the minus multi button
     public void multiMinus() {
         if (int.Parse(healthText.text) >= 0 + sliderVal) {
             healthText.text = "" + (int.Parse(healthText.text) - sliderVal);
@@ -97,11 +103,13 @@ public class CharaterInteract : MonoBehaviour {
         }
     }
 
-    public void tempPlus() { 
+    //event call for the temp plus 1 button
+    public void tempPlus() {
         tempText.text = "" + (int.Parse(tempText.text) + 1);
         mainPanel.changesMade();
     }
 
+    //event call for the temp minus 1 button
     public void tempMinus() {
         if (int.Parse(tempText.text) > 0) {
             tempText.text = "" + (int.Parse(tempText.text) - 1);
@@ -109,11 +117,13 @@ public class CharaterInteract : MonoBehaviour {
         }
     }
 
-    public void tempMultiP() { 
+    //event call for the temp plus multi button
+    public void tempMultiP() {
         tempText.text = "" + (int.Parse(tempText.text) + sliderVal);
         mainPanel.changesMade();
     }
 
+    //event call for the temp minus multi button
     public void tempMultiM() {
         if (int.Parse(tempText.text) >= 0 + sliderVal) {
             tempText.text = "" + (int.Parse(tempText.text) - sliderVal);
@@ -121,71 +131,14 @@ public class CharaterInteract : MonoBehaviour {
         }
     }
 
+    //event call for the reset health button
     public void resetHealth() {
         healthText.text = "" + maxHeatlh;
         tempText.text = "0";
         mainPanel.changesMade();
     }
 
-    //public void exitCharacter() {
-    //    EncounterStructure.removeChar(gameObject);
-    //    Destroy(gameObject);
-    //    mainPanel.changesMade();
-    //}
+    public void setCharacterFunctionality_DEPRECATED(bool functionality) {
 
-    //public void lockCharacter() {
-    //    gameObject.GetComponent<CharacterDragDrop>().changeLock();
-    //}
-
-    //public void minimizeChar() {
-    //    GetComponent<CharacterDragDrop>().changeClamp();
-
-    //    miniChar.SetActive(true);
-    //    miniChar.GetComponentInChildren<TextMeshProUGUI>().text = nameText.text;
-    //    maxChar.SetActive(false);
-
-    //    //Debug.Log(miniChar.transform.GetComponent<RectTransform>().rect.width + " " + miniChar.transform.GetComponent<RectTransform>().rect.height);
-    //}
-
-    //public void expandChar() {
-    //    GetComponent<CharacterDragDrop>().changeClamp();
-
-    //    miniChar.SetActive(false);
-    //    maxChar.SetActive(true);
-
-    //    //Debug.Log(maxChar.transform.GetComponent<RectTransform>().rect.width + " " + maxChar.transform.GetComponent<RectTransform>().rect.height);
-    //}
-
-    //fields for the buttons. used only when changing the functionality
-    //[SerializeField]
-    //private Button plusOne;
-    //[SerializeField]
-    //private Button plusMulti;
-    //[SerializeField]
-    //private Button minusOne;
-    //[SerializeField]
-    //private Button minusMulti;
-    //[SerializeField]
-    //private Button tempPOne;
-    //[SerializeField]
-    //private Button tempMOne;
-    //[SerializeField]
-    //private Button tempPMulti;
-    //[SerializeField]
-    //private Button tempMMulti;
-    //[SerializeField]
-    //private Button btReset;
-
-    public void setCharacterFunctionality_DEPRECATED(bool functionality) { 
-        
     }
-    //    plusOne.enabled = functionality;
-    //    minusOne.enabled = functionality;  
-    //    plusMulti.enabled = functionality;
-    //    minusMulti.enabled = functionality;
-    //    tempPOne.enabled = functionality;   
-    //    tempMOne.enabled = functionality;
-    //    tempPMulti.enabled = functionality;
-    //    tempMMulti.enabled = functionality;
-    //    btReset.enabled = functionality;
 }

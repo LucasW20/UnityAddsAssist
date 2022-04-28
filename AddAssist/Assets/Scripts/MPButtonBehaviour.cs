@@ -37,21 +37,13 @@ public class MPButtonBehaviour : MonoBehaviour {
     private bool saved = true;
     private float fadeTime = 3.5f;
 
-    //// Start is called before the first frame update
-    //void Start() {
-
-    //}
-
-    //// Update is called once per frame
-    //void Update() { 
-
-    //}
-
+    //event call for the Create Combatant button
     public void createButton() {
         createPanel.SetActive(true);
         setFuncationality(false);
     }
 
+    //event call for the save button
     public void saveButton() {
         setFuncationality(false);
         Debug.Log("Save Hit!");
@@ -61,6 +53,7 @@ public class MPButtonBehaviour : MonoBehaviour {
         savePanel.transform.SetAsLastSibling();
     }
 
+    //event call for the load button
     public void loadButton() {
         setFuncationality(false);
         Debug.Log("Load Hit!");
@@ -68,6 +61,7 @@ public class MPButtonBehaviour : MonoBehaviour {
         loadPanel.transform.SetAsLastSibling();
     }
 
+    //event call for the clear button
     public void resetButton() {
         setFuncationality(false);
         if (saved) {
@@ -79,7 +73,9 @@ public class MPButtonBehaviour : MonoBehaviour {
         }
     }
 
+    //event call for the Turn order button
     public void generateInitiativeOrder() {
+        //only run if there are current characters
         if (EncounterStructure.charListCount() == 0) { 
             return; 
         }
@@ -95,7 +91,7 @@ public class MPButtonBehaviour : MonoBehaviour {
     }
 
     //sub buttons
-
+    //event call for the clear button in the save panel
     public void saveClearExit() {
         setFuncationality(true);
         saved = true;
@@ -103,6 +99,7 @@ public class MPButtonBehaviour : MonoBehaviour {
         savePanel.SetActive(false);
     }
 
+    //event call for the exit button in the save panel
     public void saveExit() {
         setFuncationality(true);
         saved = true;
@@ -110,6 +107,7 @@ public class MPButtonBehaviour : MonoBehaviour {
         savePanel.SetActive(false);
     }
 
+    //event call for the load button in the load panel
     public void loadLoadExit() {
         try {
             //clear the encounter of any existing characters so we don't go over the maximum
@@ -144,21 +142,25 @@ public class MPButtonBehaviour : MonoBehaviour {
         }
     }
 
+    //event call for the exit button in the load panel
     public void loadExit() {
         setFuncationality(true);
         loadPanel.transform.GetChild(0).GetComponent<TMP_InputField>().text = "";
         loadPanel.SetActive(false);
     }
 
+    //called by other scripts to let this script know when changes have been made 
     public void changesMade() {
         saved = false;
     }
 
+    //event call for the cancel button in the reset confirm panel
     public void resetConfirmCancel() {
         setFuncationality(true);
         resetConfirmationPanel.SetActive(false);
     }
 
+    //event call for the continue button in the reset confirm panel
     public void resetConfirmContinue() {
         setFuncationality(true);
         resetConfirmationPanel.SetActive(false);
@@ -209,6 +211,7 @@ public class MPButtonBehaviour : MonoBehaviour {
         return true;
     }
 
+    //create functions specifically for loading an encounter
     public void create(string nameVal, string hpVal, string armorVal, string initiativeVal, string cHpVal, string cTempVal, string sIsCharBoss) {
         //get the values in the field. store them in class variables for multiple access points
         chName = nameVal;
@@ -275,6 +278,7 @@ public class MPButtonBehaviour : MonoBehaviour {
         }
     }
 
+    //FIRST call in the functionality line. Disables certain parts while other panels are open. 
     public void setFuncationality(bool functionality) {
         mpBlurImage.SetActive(!functionality);
         EncounterStructure.setEncounterFunctionality(functionality);

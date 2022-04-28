@@ -1,9 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using System.Linq;
 
 /**
  * Handles the data structures and logic on the different character objects in the scene. Singleton
@@ -51,7 +49,8 @@ public static class EncounterStructure {
     public static bool addChar(GameObject nObject, int nHealth, int nArmor, int nIni, string nName, bool isCharBoss) {
         try {
             charList.Add(new Character(nObject, nHealth, nArmor, nIni, nName, isCharBoss));
-        } catch (Exception e) { //if any exception is thrown for any reason return false as it is a bad add.
+        } catch (Exception e) { 
+            //if any exception is thrown for any reason return false as it is a bad add.
             Debug.LogException(e);
             return false;
         }
@@ -122,7 +121,7 @@ public static class EncounterStructure {
         tempList.Sort((s2, s1) => s1.initiative.CompareTo(s2.initiative));
         string order = "";
         
-        //check for duplicates at each index
+        //check for duplicates at each index and build the string
         for (int i = 0; i < tempList.Count; i++) {
             bool duplicate = false;
 
@@ -145,6 +144,7 @@ public static class EncounterStructure {
         return order;
     }
 
+    //getter for the number of characters in the List
     public static int charListCount() {
         return charList.Count;
     }
