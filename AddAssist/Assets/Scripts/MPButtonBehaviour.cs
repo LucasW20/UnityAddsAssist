@@ -232,7 +232,8 @@ public class MPButtonBehaviour : MonoBehaviour {
                 nChar = Instantiate(bossCharTemplate);
 
                 //set the UI elements position/size/scale
-                nChar.transform.parent = canvas.transform;
+                //nChar.transform.parent = canvas.transform; Deprecated process
+                nChar.transform.SetParent(canvas.transform);
                 nChar.GetComponent<RectTransform>().sizeDelta = bossCharTemplate.GetComponent<RectTransform>().sizeDelta;
                 nChar.GetComponent<RectTransform>().localScale = bossCharTemplate.GetComponent<RectTransform>().localScale;
                 nChar.GetComponent<RectTransform>().position = bossCharTemplate.GetComponent<RectTransform>().position;
@@ -241,7 +242,8 @@ public class MPButtonBehaviour : MonoBehaviour {
                 nChar = Instantiate(characterTemplate);
 
                 //set the UI elements position/size/scale
-                nChar.transform.parent = canvas.transform;
+                //nChar.transform.parent = canvas.transform; Deprecated process
+                nChar.transform.SetParent(canvas.transform);
                 nChar.GetComponent<RectTransform>().sizeDelta = characterTemplate.GetComponent<RectTransform>().sizeDelta;
                 nChar.GetComponent<RectTransform>().localScale = characterTemplate.GetComponent<RectTransform>().localScale;
                 nChar.GetComponent<RectTransform>().position = characterTemplate.GetComponent<RectTransform>().position;

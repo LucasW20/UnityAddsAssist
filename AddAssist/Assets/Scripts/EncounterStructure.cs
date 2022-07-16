@@ -33,8 +33,8 @@ public static class EncounterStructure {
         //to string for save/load purposes. prints out all the information about the character including current values to a single line
         public override string ToString() {
             string res = "" + chName + "," + health + "," + armor + "," + initiative + "," +
-                ob.transform.GetChild(0).GetChild(9).GetChild(0).GetComponent<TextMeshProUGUI>().text + "," +
-                ob.transform.GetChild(0).GetChild(10).GetChild(0).GetComponent<TextMeshProUGUI>().text + ",";
+                ob.transform.GetChild(0).GetChild(9).GetChild(2).GetComponent<TextMeshProUGUI>().text + "," +
+                ob.transform.GetChild(0).GetChild(10).GetChild(2).GetComponent<TextMeshProUGUI>().text + ",";
 
             if (isBoss) { res += "1"; } else { res += "0"; }
 
